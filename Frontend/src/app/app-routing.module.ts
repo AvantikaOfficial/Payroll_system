@@ -30,17 +30,24 @@ const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
+
+  // Employees
   { path: 'employees', component: EmployeesComponent },
-      { path: 'add-employee', component: AddEmployeeComponent },
+  { path: 'add-employee', component: AddEmployeeComponent },
   { path: 'add-employee/:id', component: AddEmployeeComponent },
+
+  // Departments
   { path: 'departments', component: DepartmentComponent },
+  { path: 'add-department', component: AddDepartmentComponent },
+
+  // Others
   { path: 'leaves', component: LeavesComponent },
   { path: 'salary', component: SalaryComponent },
   { path: 'charts/apex', component: ChartApexComponent },
   { path: 'report-calendar', component: ReportCalendarComponent },
   { path: 'nav-bar', component: NavBarComponent },
-    { path: 'add-department', component: AddDepartmentComponent },
 
+  // Reports
   {
     path: 'reports',
     children: [
@@ -52,40 +59,31 @@ const routes: Routes = [
       { path: 'security-report', component: SecurityReportComponent },
       { path: 'work-from-home-report', component: WorkFromHomeReportComponent },
       { path: 'contact-report', component: ContactReportComponent },
+    ]
+  },
 
-    ],
-  },
-{
-    path: 'application',
-    redirectTo: 'application/calendar',
-    pathMatch: 'full'
-  },
+  // Applications
   {
     path: 'application',
     children: [
+      { path: '', redirectTo: 'calendar', pathMatch: 'full' },
       { path: 'calendar', component: CalendarComponent },
       { path: 'chat', component: ChatComponent },
       { path: 'notes', component: NotesComponent },
     ]
   },
 
+  // Profile
   {
     path: 'profile',
-    redirectTo: 'profile/forgot-password',
-    pathMatch: 'full'
-  },
-  {
-  path: 'profile',
-  children: [
-    { path: '', redirectTo: 'forgot-password', pathMatch: 'full' },
-    { path: 'forgot-password', component: ForgotPasswordComponent },
-    { path: 'reset-password', component: ResetPasswordComponent },
-    { path: 'lock-screen', component: LockScreenComponent },
-    { path: 'profile', component: ProfileComponent },
-
-  ]
-},
-
+    children: [
+      { path: '', redirectTo: 'forgot-password', pathMatch: 'full' },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent },
+      { path: 'lock-screen', component: LockScreenComponent },
+      { path: 'profile', component: ProfileComponent },
+    ]
+  }
 ];
 
 @NgModule({

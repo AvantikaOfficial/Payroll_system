@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { EmployeesService, Employee } from '../Services/Employees-serives/employees.service';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-employees',
   templateUrl: './employees.component.html',
   styleUrls: ['./employees.component.scss']
 })
-export class EmployeesComponent implements OnInit {
+export class EmployeesComponent implements OnInit, OnDestroy {
   employees: Employee[] = [];
   loading = false;
   error: string | null = null;
   selectedEmployeeIdForDelete?: number;
+
+  private routerSub?: Subscription;
 
   constructor(
     private employeesService: EmployeesService,
@@ -20,36 +24,57 @@ export class EmployeesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
+
+    // Reload employees on every navigation that starts with /employees (handles /employees and /employees?query=...)
+    this.routerSub = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe(event => {
+        const navEnd = event as NavigationEnd;
+        if (navEnd.urlAfterRedirects.startsWith('/employees')) {
+          console.log('Navigated to /employees, reloading employees...');
+          this.loadEmployees();
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.routerSub?.unsubscribe();
   }
 
   loadEmployees(): void {
     this.loading = true;
+    this.error = null;
+
     this.employeesService.getEmployees().subscribe({
-      next: (data) => {
+      next: (data: Employee[]) => {
         this.employees = data;
         this.loading = false;
+        console.log('Employees loaded:', data);
       },
       error: (err) => {
         this.error = err.message || 'Error loading employees';
         this.loading = false;
+        console.error('Failed to load employees:', err);
       }
     });
   }
 
-  confirmDelete(id: number) {
+  confirmDelete(id: number): void {
     this.selectedEmployeeIdForDelete = id;
   }
 
-  deleteEmployee() {
+  deleteEmployee(): void {
     if (!this.selectedEmployeeIdForDelete) return;
 
     this.employeesService.deleteEmployee(this.selectedEmployeeIdForDelete).subscribe({
       next: () => {
         this.employees = this.employees.filter(emp => emp.id !== this.selectedEmployeeIdForDelete);
+        console.log(`Employee ${this.selectedEmployeeIdForDelete} deleted`);
         this.selectedEmployeeIdForDelete = undefined;
       },
       error: (err) => {
         alert('Error deleting employee: ' + (err.message || 'Unknown error'));
+        console.error('Delete failed:', err);
       }
     });
   }

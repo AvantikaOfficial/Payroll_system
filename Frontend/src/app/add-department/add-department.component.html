@@ -1,208 +1,55 @@
 <app-nav-bar></app-nav-bar>
-    <!-- Begin Wrapper -->
-    <div class="main-wrapper">
-        <div class="page-wrapper">
-            <!-- Start Content -->
-            <div class="content">
-                <!-- start row -->
-                <div class="row">
-                    <div class="col-lg-10 mx-auto">
-                        <div>
-                            <h6 class="mb-3 fs-14"><a href="companies.html"><i class="ti ti-arrow-left me-1"></i>Companies</a></h6>
-                            <form action="https://dleohr.dreamstechnologies.com/html/template/add-company.html">
+<!-- Begin Wrapper -->
+<div class="main-wrapper">
+  <div class="page-wrapper">
+    <!-- Start Content -->
+    <div class="content">
+      <!-- start row -->
+      <div class="row">
+        <div class="col-lg-8 mx-auto">
+          <div>
+            <h6 class="mb-3 fs-14">
+              <a href="departments"><i class="ti ti-arrow-left me-1"></i>Departments</a>
+            </h6>
 
-                                 <div class="card rounded-0">
-                                    <div class="card-header">
-                                        <h6 class="fw-bold mb-0">Basic Details</h6>
-                                    </div> <!-- end card header -->
-                                    <div class="card-body">
-
-                                        <div>
-                                            <label class="form-label">Image</label>
-                                            <div class="d-flex align-items-center mb-3">
-                                                <div class="avatar avatar-xxl border border-dashed bg-light me-3 flex-shrink-0">
-                                                    <i class="ti ti-photo text-primary"></i>
-                                                </div>
-                                                <div class="d-inline-flex flex-column align-items-start">
-                                                    <div class="drag-upload-btn btn btn-sm btn-primary position-relative mb-2">
-                                                        <i class="ti ti-photo me-1"></i>Upload Image
-                                                        <input type="file" class="form-control image-sign" multiple="">
-                                                    </div>
-                                                    <span class="text-dark fs-12">JPG or PNG format, not exceeding 5MB.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- start row -->
-                                        <div class="row">
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Company Name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Email <span class="text-danger">*</span></label>
-                                                    <input type="email" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">VAT Number <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Register Number <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-4">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Incorporation Date <span class="text-danger">*</span></label>
-                                                    <div class="input-group w-auto input-group-flat">
-                                                        <input type="text" class="form-control" data-provider="flatpickr" data-date-format="d M, Y" placeholder="dd/mm/yyyy">
-                                                        <span class="input-group-text">
-                                                            <i class="ti ti-calendar"></i>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-12">
-                                                <div>
-                                                    <label class="form-label">Website <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                        </div>
-                                        <!-- end row -->
-
-                                    </div> <!-- end card body -->
-                                </div> <!-- end card -->
-
-                                <div class="card rounded-0">
-                                    <div class="card-header">
-                                        <h6 class="fw-bold mb-0">Address Details</h6>
-                                    </div> <!-- end card header -->
-                                    <div class="card-body pb-0">
-
-                                        <!-- start row -->
-                                        <div class="row">
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Address Line 1</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Address Line 2</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Country</label>
-                                                    <select class="select">
-                                                        <option>Select</option>
-                                                        <option>United States of America</option>
-                                                        <option>Canada</option>
-                                                        <option>Germany</option>
-                                                        <option>France</option>
-												    </select>
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">State</label>
-                                                    <select class="select">
-                                                        <option>Select</option>
-                                                        <option>California</option>
-                                                        <option>New York</option>
-                                                        <option>Texas</option>
-                                                        <option>Florida</option>
-												    </select>
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">City</label>
-                                                    <select class="select">
-                                                        <option>Select</option>
-                                                        <option>Los Angeles</option>
-                                                        <option>San Diego</option>
-                                                        <option>Fresno</option>
-                                                        <option>San Francisco</option>
-												    </select>
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                            <div class="col-md-6">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Postal Code</label>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div> <!-- end col -->
-
-                                        </div>
-                                        <!-- end row -->
-
-                                    </div> <!-- end card body -->
-                                </div>
-                                <!-- end card -->
-
-                                <div class="card rounded-0">
-                                    <div class="card-header">
-                                        <h6 class="fw-bold mb-0">Policies</h6>
-                                    </div> <!-- end card header -->
-                                    <div class="card-body">
-                                        <div class="mb-3">
-                                            <label class="form-label">Policy Name</label>
-                                            <input type="text" class="form-control">
-                                        </div>
-                                        <div>
-                                            <label class="form-label">Upload Document</label>
-                                            <div class="file-uploader">
-                                                <input type="file" class="form-control">
-                                                <a href="#" class="input-file">
-                                                    <span class="browse-btn">Browse Files</span>
-                                                    <span class="browse-text">No Files Selected</span>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div> <!-- end card body -->
-                                </div> <!-- end card -->
-
-                                <div class="d-flex align-items-center justify-content-end">
-                                    <button type="button" class="btn btn-light me-2">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">Add Company</button>
-                                </div>
-                            </form> <!-- end form -->
-                        </div>
-                    </div> <!-- end col -->
+            <form (ngSubmit)="onSubmit()" [formGroup]="departmentForm">
+              <div class="card rounded-0">
+                <div class="card-header">
+                  <h6 class="fw-bold mb-0">Department Details</h6>
                 </div>
-            </div>
-        </div>
 
+                <div class="card-body">
+                  <!-- Department Name -->
+                  <div class="mb-3">
+                    <label class="form-label">Department Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="name" required />
+                  </div>
+
+                  <!-- Status -->
+                  <div class="mb-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" formControlName="status">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                    </select>
+                  </div>
+
+                  <!-- Optional: Department Description -->
+                  <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" rows="3" formControlName="description"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex align-items-center justify-content-end mt-3">
+                <button type="button" class="btn btn-light me-2" routerLink="/departments">Cancel</button>
+                <button type="submit" class="btn btn-primary" [disabled]="departmentForm.invalid">Add Department</button>
+              </div>
+            </form>
+          </div>
+        </div> <!-- end col -->
+      </div>
     </div>
+  </div>
+</div>

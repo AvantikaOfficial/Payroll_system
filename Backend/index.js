@@ -12,7 +12,7 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0
 });
- const promisePool = pool.promise();
+const promisePool = pool.promise();
 
 const app = express();
 const PORT = 3000;
@@ -109,33 +109,42 @@ app.get('/api/employees/:id', (req, res) => {
 });
 
 // UPDATE - Employee by ID
-app.put('/api/employees/:id', validateEmployeeFields, (req, res) => {
-  let {
+app.put('/api/employees/:id', (req, res) => {
+  const { id } = req.params;
+  const updated = req.body;
+
+  console.log('Received PUT for employee:', id);
+  console.log('Data:', updated);
+
+  const {
     name, office, email, salary, role, status,
     firstname, lastName, position, team, departmentId, joiningDate,
     inviteEmail, employmentType, countryOfEmployment, lineManager, currency, frequency
-  } = req.body;
+  } = updated;
 
-  name = name || `${firstname} ${lastName}`;
-  departmentId = departmentId || 1;
-
-  const sql = `UPDATE employees SET 
-    name = ?, office = ?, email = ?, salary = ?, role = ?, status = ?, 
+  const sql = `UPDATE employees SET
+    name = ?, office = ?, email = ?, salary = ?, role = ?, status = ?,
     firstname = ?, lastName = ?, position = ?, team = ?, departmentId = ?, joiningDate = ?,
     inviteEmail = ?, employmentType = ?, countryOfEmployment = ?, lineManager = ?, currency = ?, frequency = ?
     WHERE id = ?`;
 
   pool.query(sql, [
-    name, office, email, salary, role, status,
+    name || `${firstname} ${lastName}`, office, email, salary, role, status,
     firstname, lastName, position, team, departmentId, joiningDate,
     inviteEmail ?? false, employmentType, countryOfEmployment, lineManager, currency, frequency,
-    req.params.id
+    id
   ], (err, result) => {
     if (err) {
       console.error('Error updating employee:', err.message);
       return res.status(500).json({ error: err.message });
     }
-    res.json({ message: 'Employee updated' });
+
+    if (result.affectedRows === 0) {
+      console.warn('No employee updated. ID not found:', id);
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    res.json({ message: 'Employee updated successfully' });
   });
 });
 
@@ -234,6 +243,62 @@ app.delete('/api/leaves/:id', async (req, res) => {
 app.use((err, req, res, next) => {
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
+});
+
+
+//department
+app.post('/api/department', (req, res) => {
+  const { name, status } = req.body;
+  const sql = 'INSERT INTO department (name, status) VALUES (?, ?)';
+  pool.query(sql, [name, status || 'active'], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json({ message: 'Department added', id: result.insertId });
+  });
+});
+
+// ✅ READ - Get all departments
+app.get('/api/department', (req, res) => {
+  pool.query('SELECT * FROM department', (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(results);
+  });
+});
+
+// ✅ READ - Get department by ID
+app.get('/api/department/:id', (req, res) => {
+  pool.query('SELECT * FROM department WHERE id = ?', [req.params.id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.length === 0) return res.status(404).json({ error: 'Department not found' });
+    res.json(result[0]);
+  });
+});
+
+// ✅ UPDATE - Update department
+app.put('/api/department/:id', (req, res) => {
+  const { name, status } = req.body;
+  const sql = 'UPDATE department SET name = ?, status = ? WHERE id = ?';
+  pool.query(sql, [name, status, req.params.id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Department updated' });
+  });
+});
+
+// ✅ DELETE - Delete department
+app.delete('/api/department/:id', (req, res) => {
+  const sql = 'DELETE FROM department WHERE id = ?';
+  pool.query(sql, [req.params.id], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Department deleted' });
+  });
+});
+
+app.post('/api/department', (req, res) => {
+  const { name, status, description } = req.body;
+  const sql = 'INSERT INTO department (name, status, description) VALUES (?, ?, ?)';
+  pool.query(sql, [name, status, description], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json({ message: 'Department added successfully', id: result.insertId });
+  });
 });
 
 // Start server

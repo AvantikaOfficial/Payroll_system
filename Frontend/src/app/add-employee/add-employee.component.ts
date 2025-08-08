@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmployeesService, Employee } from '../Services/Employees-serives/employees.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -15,10 +15,10 @@ enum FormStatus {
   templateUrl: './add-employee.component.html',
   styleUrls: ['./add-employee.component.scss']
 })
-export class AddEmployeeComponent implements OnInit {
+export class AddEmployeeComponent implements OnInit, AfterViewInit {
   employeeForm: FormGroup;
   employeeId?: number;
-formStatus: FormStatus = FormStatus.Pending;
+  formStatus: FormStatus = FormStatus.Pending;
 
   constructor(
     private fb: FormBuilder,
@@ -26,27 +26,26 @@ formStatus: FormStatus = FormStatus.Pending;
     private employeesService: EmployeesService,
     private router: Router
   ) {
-    // Define form controls with validation
-this.employeeForm = this.fb.group({
-  firstname: ['', Validators.required],
-  lastName: ['', Validators.required],
-  email: ['', [Validators.required, Validators.email]],
-  inviteEmail: [false],
-  office: [''],
-  joiningDate: [''],
-  position: [''],
-  team: [''],
-  employmentType: [''],
-  countryOfEmployment: [''],
-  lineManager: [''],
-  currency: [''],
-  frequency: [''],
-  salary: [0, [Validators.min(0)]],
-  departmentId: [1, [Validators.required, Validators.min(1)]],
-  status: [''],  // no Validators.required
-  role: [''],    // optional
-  name: [''],    // optional
-});
+    this.employeeForm = this.fb.group({
+      firstname: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      inviteEmail: [false],
+      office: [''],
+      joiningDate: [''],
+      position: [''],
+      team: [''],
+      employmentType: [''],
+      countryOfEmployment: [''],
+      lineManager: [''],
+      currency: [''],
+      frequency: [''],
+      salary: [0, [Validators.min(0)]],
+      departmentId: [1, [Validators.required, Validators.min(1)]],
+      status: [''],
+      role: [''],
+      name: [''],
+    });
   }
 
   ngOnInit(): void {
@@ -89,28 +88,51 @@ this.employeeForm = this.fb.group({
     });
   }
 
-onSubmit(): void {
-  this.formStatus = FormStatus.Pending;
+  onSubmit(): void {
+    this.formStatus = FormStatus.Pending;
 
-  if (this.employeeForm.valid) {
-    this.employeesService.addEmployee(this.employeeForm.value).subscribe({
-      next: () => {
-        this.formStatus = FormStatus.Success;
-        alert('Employee added successfully!');
-        this.router.navigate(['/employees']);
-      },
-      error: (err) => {
-        this.formStatus = FormStatus.Error;
-        console.error('Add failed', err);
-        alert(`Could not connect to the backend. Check if Express server is running at http://localhost:3000`);
+    if (this.employeeForm.valid) {
+      const formData = this.employeeForm.value;
+
+      if (this.employeeId) {
+        this.employeesService.updateEmployee(this.employeeId, formData).subscribe({
+          next: () => {
+            this.formStatus = FormStatus.Success;
+            alert('Employee updated successfully!');
+
+            // ✅ Force reload to trigger ngOnInit in employees.component.ts
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/employees']);
+            });
+          },
+          error: (err) => {
+            this.formStatus = FormStatus.Error;
+            console.error('Update failed', err);
+            alert(`Could not update employee. Please check backend connection.`);
+          }
+        });
+      } else {
+        this.employeesService.addEmployee(formData).subscribe({
+          next: () => {
+            this.formStatus = FormStatus.Success;
+            alert('Employee added successfully!');
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+              this.router.navigate(['/employees']);
+            });
+          },
+          error: (err) => {
+            this.formStatus = FormStatus.Error;
+            console.error('Add failed', err);
+            alert(`Could not connect to the backend.`);
+          }
+        });
       }
-    });
-  } else {
-    this.formStatus = FormStatus.Error;
-    this.employeeForm.markAllAsTouched();
+    } else {
+      this.formStatus = FormStatus.Error;
+      this.employeeForm.markAllAsTouched();
+    }
   }
-}
-  
+
   onCancel(): void {
     this.employeeForm.reset({
       inviteEmail: false,
@@ -121,8 +143,8 @@ onSubmit(): void {
   }
 
   ngAfterViewInit(): void {
-      flatpickr("[data-provider='flatpickr']", {
-        dateFormat: "d M, Y",
-      });
-    }
+    flatpickr("[data-provider='flatpickr']", {
+      dateFormat: "d M, Y",
+    });
+  }
 }

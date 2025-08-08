@@ -1,454 +1,232 @@
 <app-nav-bar></app-nav-bar>
-    <!-- Begin Wrapper -->
-    <div class="main-wrapper">
-        <div class="page-wrapper">
-            <div class="content">
+<!-- Begin Wrapper -->
+<div class="main-wrapper">
+    <div class="page-wrapper">
+        <div class="content">
 
-                <!-- Page Header -->
-                 <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                    <div class="flex-grow-1">
-                        <h5 class="fw-bold">Companies</h5>
-                        <nav aria-label="breadcrumb">
+            <!-- Page Header -->
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+                <div class="flex-grow-1">
+                    <h5 class="fw-bold">Department</h5>
+                    <!-- <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-divide p-0 mb-0">
                                 <li class="breadcrumb-item d-flex align-items-center"><a href="index.html"><i class="ti ti-home me-1"></i>Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Companies</li>
+                                <li class="breadcrumb-item active" aria-current="page">Department</li>
                             </ol>
-                        </nav>
+                        </nav> -->
+                </div>
+                <div>
+                    <a href="add-department" class="btn btn-primary"><i class="ti ti-circle-plus me-1"></i>New
+                        Department</a>
+                </div>
+            </div>
+            <!-- End Page Header -->
+
+            <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
+                <div class="datatable-search">
+                    <a href="javascript:void(0);" class="input-text"><i class="ti ti-search"></i></a>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-2">
+                        <a href="javascript:void(0);"
+                            class="btn fs-14 py-1 btn-outline-white d-inline-flex align-items-center"
+                            data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                            <i class="ti ti-filter me-1"></i>Filter
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 border-0" id="filter-dropdown">
+                            <div class="card mb-0">
+                                <div class="card-header">
+                                    <div class="d-flex align-items-center justify-content-between">
+                                        <h6 class="fw-bold mb-0">Filter</h6>
+                                        <div class="d-flex align-items-center">
+                                            <a href="javascript:void(0);"
+                                                class="link-danger text-decoration-underline">Clear All</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form action="#">
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <label class="form-label">Name</label>
+                                                <a href="javascript:void(0);" class="link-primary mb-1">Reset</a>
+                                            </div>
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0);"
+                                                    class="dropdown-toggle justify-content-between btn bg-light justify-content-start border w-100"
+                                                    data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                    aria-expanded="true">
+                                                    Select
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu w-100">
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Nexa Core Solutions
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Byte Forge Technologies
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Code Pulse Innovations
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Quantum Stack Solutions
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Cognitix Technologies
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <label class="form-label">Status</label>
+                                                <a href="javascript:void(0);" class="link-primary mb-1">Reset</a>
+                                            </div>
+                                            <div class="dropdown">
+                                                <a href="javascript:void(0);"
+                                                    class="dropdown-toggle justify-content-between btn bg-light justify-content-start border w-100"
+                                                    data-bs-toggle="dropdown" data-bs-auto-close="outside"
+                                                    aria-expanded="true">
+                                                    Select
+                                                </a>
+                                                <ul class="dropdown-menu dropdown-menu w-100">
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Active
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label
+                                                            class="dropdown-item px-2 d-flex align-items-center rounded-1">
+                                                            <input class="form-check-input m-0 me-2" type="checkbox">
+                                                            Inactive
+                                                        </label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex align-items-center justify-content-end">
+                                        <button type="button" class="btn btn-outline-white me-2"
+                                            id="close-filter">Close</button>
+                                        <button type="submit" class="btn btn-primary">Filter</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div>
-                        <a href="add-department" class="btn btn-primary"><i class="ti ti-circle-plus me-1"></i>New Company</a>
-                    </div>
-                </div>
-				<!-- End Page Header -->
-
-                <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
-                    <div class="datatable-search">
-                        <a href="javascript:void(0);" class="input-text"><i class="ti ti-search"></i></a>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <div class="dropdown me-2">
-                            <a href="javascript:void(0);" class="btn fs-14 py-1 btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown" data-bs-auto-close="outside">
-                                <i class="ti ti-filter me-1"></i>Filter
+                        <div class="dropdown">
+                            <a href="javascript:void(0);"
+                                class="dropdown-toggle btn fs-14 py-1 btn-outline-white d-inline-flex align-items-center"
+                                data-bs-toggle="dropdown">
+                                <i class="ti ti-sort-descending-2 text-dark me-1"></i>Sort By : Newest
                             </a>
-                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0 border-0" id="filter-dropdown">
-                                <div class="card mb-0">
-                                    <div class="card-header">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <h6 class="fw-bold mb-0">Filter</h6>
-                                            <div class="d-flex align-items-center">
-                                                <a href="javascript:void(0);" class="link-danger text-decoration-underline">Clear All</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <form action="#">
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <label class="form-label">Name</label>
-                                                    <a href="javascript:void(0);" class="link-primary mb-1">Reset</a>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle justify-content-between btn bg-light justify-content-start border w-100" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
-                                                        Select
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu w-100">
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Nexa Core Solutions
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Byte Forge Technologies
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Code Pulse Innovations
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Quantum Stack Solutions
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Cognitix Technologies
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <label class="form-label">Status</label>
-                                                    <a href="javascript:void(0);" class="link-primary mb-1">Reset</a>
-                                                </div>
-                                                <div class="dropdown">
-                                                    <a href="javascript:void(0);" class="dropdown-toggle justify-content-between btn bg-light justify-content-start border w-100" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="true">
-                                                        Select
-                                                    </a>
-                                                    <ul class="dropdown-menu dropdown-menu w-100">
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Active
-                                                            </label>
-                                                        </li>
-                                                        <li>
-                                                            <label class="dropdown-item px-2 d-flex align-items-center rounded-1">
-                                                                <input class="form-check-input m-0 me-2" type="checkbox">
-                                                                Inactive
-                                                            </label>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="card-footer d-flex align-items-center justify-content-end">
-                                            <button type="button" class="btn btn-outline-white me-2" id="close-filter">Close</button>
-                                            <button type="submit" class="btn btn-primary">Filter</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="dropdown">
-                                <a href="javascript:void(0);" class="dropdown-toggle btn fs-14 py-1 btn-outline-white d-inline-flex align-items-center" data-bs-toggle="dropdown">
-                                    <i class="ti ti-sort-descending-2 text-dark me-1"></i>Sort By : Newest
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end p-1">
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item rounded-1">Newest</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item rounded-1">Oldest</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item rounded-1">Desending</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item rounded-1">Last Month</a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);" class="dropdown-item rounded-1">Last 7 Days</a>
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul class="dropdown-menu dropdown-menu-end p-1">
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Newest</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Oldest</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Desending</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Last Month</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item rounded-1">Last 7 Days</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="table-responsive">
-                    <table class="table table-nowrap datatable">
-                        <thead class="thead-ight">
-                            <tr>
-                              <th>Sr.No</th>
-                                <th>Department</th>
-                                <th>Status</th>
-                                <th class="no-sort">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                              <td>1</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-01.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Nexa Core Solutions</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-02.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Byte Forge Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option selected>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>3</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-03.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Code Pulse Innovations</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option selected>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>4</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-04.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Quantum Stack Solutions </a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option selected>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>5</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-05.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Cognitix Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option selected>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>6</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-06.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Data Spire Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option selected>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>7</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-07.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Nebula Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option selected>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>8</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-08.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Cloud Morph Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option>Active</option>
-                                            <option selected>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>9</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-09.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Dock Sphere Solutions</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option selected>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                              <td>10</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        <a href="company-details.html" class="avatar avatar-sm rounded-circle bg-light border">
-                                            <img src="assets/img/company/company-10.svg" class="w-auto h-auto" alt="img">
-                                        </a>
-                                        <div class="ms-2">
-                                            <h6 class="fs-14 mb-0"><a href="company-details.html">Hexora Technologies</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div>
-                                        <select class="select">
-                                            <option selected>Active</option>
-                                            <option>Inactive</option>
-                                        </select>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="d-inline-flex align-items-center">
-                                        <a href="edit-company.html" class="btn btn-icon btn-sm btn-outline-white border-0"><i class="ti ti-edit"></i></a>
-                                        <a href="javascript:void(0);" class="btn btn-icon btn-sm btn-outline-white border-0" data-bs-toggle="modal" data-bs-target="#delete_modal"><i class="ti ti-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                                
+            <div class="table-responsive">
+                <table class="table table-nowrap datatable">
+                    <thead class="thead-ight">
+                        <tr>
+                            <th>Sr.No</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th class="no-sort">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let dept of departments; let i = index">
+                            <td>{{ i + 1 }}</td>
+                            <td>{{ dept.name }}</td>
+                            <td>
+                                <span class="badge" [ngClass]="{
+          'bg-success': dept.status === 'active',
+          'bg-danger': dept.status === 'inactive'
+        }">
+                                    {{ dept.status | titlecase }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+
+                                    <a class="btn btn-sm btn-primary" [routerLink]="['/add-department', dept.id]">
+                                        <i class="ti ti-trash"></i> Edit
+                                    </a> &nbsp;
+                                    <button class="btn btn-sm btn-danger" (click)="confirmDelete(dept.id!)"
+                                        data-bs-toggle="modal" data-bs-target="#delete_modal">
+                                        <i class="ti ti-trash"></i> Delete
+                                    </button>
+
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
             </div>
-            <!-- End Content -->
+
         </div>
-        <div class="modal fade" id="delete_modal">
-            <div class="modal-dialog modal-dialog-centered modal-sm">
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <div class="mb-3">
-                            <span class="avatar bg-danger"><i class="ti ti-trash fs-24"></i></span>
-                        </div>
-                        <h6 class="mb-1">Delete Confirmation</h6>
-                        <p class="mb-3">Are you sure want to delete company?</p>
-                        <div class="d-flex justify-content-center">
-                            <a href="javascript:void(0);" class="btn btn-outline-white w-100 me-2" data-bs-dismiss="modal">Cancel</a>
-                            <a href="companies.html" class="btn btn-danger w-100">Yes, Delete</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- End Content -->
     </div>
+    <div class="modal fade" id="delete_modal">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content">
+      <div class="modal-body text-center">
+        <div class="mb-3">
+          <span class="avatar bg-danger"><i class="ti ti-trash fs-24"></i></span>
+        </div>
+        <h6 class="mb-1">Delete Confirmation</h6>
+        <p class="mb-3">Are you sure want to delete this department?</p>
+        <div class="d-flex justify-content-center">
+          <button class="btn btn-outline-white w-100 me-2" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger w-100" (click)="deleteDepartment()">Yes, Delete</button>
+        </div>
+        <button id="closeDeleteModalBtn" class="d-none" data-bs-dismiss="modal"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>

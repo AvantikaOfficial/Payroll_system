@@ -1,8 +1,9 @@
-const express = require('express');
+const express = require('express'); 
 const cors = require('cors');
 const mysql = require('mysql2');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
 
-// Create connection pool and wrap it with promise support
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -12,13 +13,21 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0
 });
+
 const promisePool = pool.promise();
 
 const app = express();
 const PORT = 3000;
 
-app.use(cors());
+// Middleware
+app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
 app.use(express.json());
+app.use(session({
+  secret: 'your-secret-key', // replace with a strong secret
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // set to true if using HTTPS
+}));
 
 // Test DB connection
 pool.getConnection((err, conn) => {
@@ -35,7 +44,7 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from backend' });
 });
 
-// Validate required fields middleware
+// Validate employee fields middleware
 function validateEmployeeFields(req, res, next) {
   const body = req.body;
   const firstname = body.firstname || body.firstName;
@@ -43,9 +52,7 @@ function validateEmployeeFields(req, res, next) {
   const email = body.email;
 
   if (!firstname || !lastName || !email) {
-    return res.status(400).json({
-      error: 'Missing required fields: firstname, lastName, email'
-    });
+    return res.status(400).json({ error: 'Missing required fields: firstname, lastName, email' });
   }
 
   req.body.firstname = firstname;
@@ -53,8 +60,9 @@ function validateEmployeeFields(req, res, next) {
   next();
 }
 
-// CREATE - Add employee
-// CREATE - Add employee
+// Employee CRUD routes
+
+// CREATE employee
 app.post('/api/employees', validateEmployeeFields, (req, res) => {
   let {
     name, office, email, salary, role, status,
@@ -83,7 +91,7 @@ app.post('/api/employees', validateEmployeeFields, (req, res) => {
   });
 });
 
-// READ - All employees
+// READ all employees
 app.get('/api/employees', (req, res) => {
   pool.query('SELECT * FROM employees', (err, results) => {
     if (err) {
@@ -94,7 +102,7 @@ app.get('/api/employees', (req, res) => {
   });
 });
 
-// READ - Single employee by ID
+// READ single employee by ID
 app.get('/api/employees/:id', (req, res) => {
   pool.query('SELECT * FROM employees WHERE id = ?', [req.params.id], (err, result) => {
     if (err) {
@@ -108,13 +116,10 @@ app.get('/api/employees/:id', (req, res) => {
   });
 });
 
-// UPDATE - Employee by ID
+// UPDATE employee by ID
 app.put('/api/employees/:id', (req, res) => {
   const { id } = req.params;
   const updated = req.body;
-
-  console.log('Received PUT for employee:', id);
-  console.log('Data:', updated);
 
   const {
     name, office, email, salary, role, status,
@@ -140,7 +145,6 @@ app.put('/api/employees/:id', (req, res) => {
     }
 
     if (result.affectedRows === 0) {
-      console.warn('No employee updated. ID not found:', id);
       return res.status(404).json({ message: 'Employee not found' });
     }
 
@@ -148,7 +152,7 @@ app.put('/api/employees/:id', (req, res) => {
   });
 });
 
-// DELETE - Employee by ID
+// DELETE employee by ID
 app.delete('/api/employees/:id', (req, res) => {
   pool.query('DELETE FROM employees WHERE id = ?', [req.params.id], (err, result) => {
     if (err) {
@@ -159,7 +163,7 @@ app.delete('/api/employees/:id', (req, res) => {
   });
 });
 
-// leaves backend----------------------------------------------------------------------
+// Leave management
 
 // Validation middleware for leave requests
 function validateLeave(req, res, next) {
@@ -199,7 +203,7 @@ app.get('/api/leaves', async (req, res) => {
   }
 });
 
-// READ leave by employee_id
+// READ leaves by employee_id
 app.get('/api/leaves/employee/:employee_id', async (req, res) => {
   try {
     const [rows] = await promisePool.query(
@@ -213,7 +217,7 @@ app.get('/api/leaves/employee/:employee_id', async (req, res) => {
   }
 });
 
-// UPDATE leave
+// UPDATE leave by ID
 app.put('/api/leaves/:id', async (req, res) => {
   const { status, reason } = req.body;
   try {
@@ -228,7 +232,7 @@ app.put('/api/leaves/:id', async (req, res) => {
   }
 });
 
-// DELETE leave
+// DELETE leave by ID
 app.delete('/api/leaves/:id', async (req, res) => {
   try {
     await promisePool.query('DELETE FROM leaves WHERE id = ?', [req.params.id]);
@@ -239,24 +243,19 @@ app.delete('/api/leaves/:id', async (req, res) => {
   }
 });
 
-// Global error handler
-app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
-  res.status(500).json({ error: 'Internal Server Error' });
-});
+// Department management
 
-
-//department
+// CREATE department
 app.post('/api/department', (req, res) => {
-  const { name, status } = req.body;
-  const sql = 'INSERT INTO department (name, status) VALUES (?, ?)';
-  pool.query(sql, [name, status || 'active'], (err, result) => {
+  const { name, status, description } = req.body;
+  const sql = 'INSERT INTO department (name, status, description) VALUES (?, ?, ?)';
+  pool.query(sql, [name, status || 'active', description], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json({ message: 'Department added', id: result.insertId });
+    res.json({ message: 'Department added successfully', id: result.insertId });
   });
 });
 
-// ✅ READ - Get all departments
+// READ all departments
 app.get('/api/department', (req, res) => {
   pool.query('SELECT * FROM department', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -264,7 +263,7 @@ app.get('/api/department', (req, res) => {
   });
 });
 
-// ✅ READ - Get department by ID
+// READ department by ID
 app.get('/api/department/:id', (req, res) => {
   pool.query('SELECT * FROM department WHERE id = ?', [req.params.id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -273,33 +272,87 @@ app.get('/api/department/:id', (req, res) => {
   });
 });
 
-// ✅ UPDATE - Update department
+// UPDATE department by ID
 app.put('/api/department/:id', (req, res) => {
   const { name, status } = req.body;
   const sql = 'UPDATE department SET name = ?, status = ? WHERE id = ?';
-  pool.query(sql, [name, status, req.params.id], (err, result) => {
+  pool.query(sql, [name, status, req.params.id], (err) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Department updated' });
   });
 });
 
-// ✅ DELETE - Delete department
+// DELETE department by ID
 app.delete('/api/department/:id', (req, res) => {
-  const sql = 'DELETE FROM department WHERE id = ?';
-  pool.query(sql, [req.params.id], (err, result) => {
+  pool.query('DELETE FROM department WHERE id = ?', [req.params.id], (err) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Department deleted' });
   });
 });
 
-app.post('/api/department', (req, res) => {
-  const { name, status, description } = req.body;
-  const sql = 'INSERT INTO department (name, status, description) VALUES (?, ?, ?)';
-  pool.query(sql, [name, status, description], (err, result) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Department added successfully', id: result.insertId });
+// User registration
+app.post('/api/register', async (req, res) => {
+  const { firstname, lastname, email, password } = req.body;
+  if (!firstname || !lastname || !email || !password) {
+    return res.status(400).json({ error: 'Missing firstname, lastname, email or password' });
+  }
+
+  try {
+    const username = `${firstname.trim()} ${lastname.trim()}`.trim();
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const [result] = await promisePool.query(
+      'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+      [username, email, hashedPassword]
+    );
+    res.status(201).json({ message: 'User registered', id: result.insertId });
+  } catch (err) {
+    console.error('Error registering user:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// User login route
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ error: 'Missing email or password' });
+  }
+
+  try {
+    const [rows] = await promisePool.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (rows.length === 0) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    const user = rows[0];
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Optional: you can store more info here
+    res.json({
+      message: 'Login successful',
+      user: {
+        id: user.id,
+        email: user.email,
+        firstname: user.firstname || ''
+      }
+    });
+  } catch (err) {
+    console.error('Login error:', err.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// User logout
+app.post('/api/logout', (req, res) => {
+  req.session.destroy(() => {
+    res.json({ message: 'Logged out' });
   });
 });
 
 // Start server
-app.listen(PORT, () => console.log(`Server is running at http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

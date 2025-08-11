@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { DepartmentComponent } from './department/department.component';
@@ -29,11 +30,13 @@ import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
+
+  // Authentication
   { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+
+  // Dashboard
   { path: 'dashboard', component: DashboardComponent },
-  {
-    path:'register', component: RegisterComponent
-  },
 
   // Employees
   { path: 'employees', component: EmployeesComponent },
@@ -44,14 +47,16 @@ const routes: Routes = [
   { path: 'departments', component: DepartmentComponent },
   { path: 'add-department', component: AddDepartmentComponent },
 
-  // Others
+  // Leaves & Salary
   { path: 'leaves', component: LeavesComponent },
   { path: 'salary', component: SalaryComponent },
+
+  // Charts & Reports
   { path: 'charts/apex', component: ChartApexComponent },
   { path: 'report-calendar', component: ReportCalendarComponent },
   { path: 'nav-bar', component: NavBarComponent },
 
-  // Reports
+  // Reports (nested)
   {
     path: 'reports',
     children: [
@@ -66,7 +71,7 @@ const routes: Routes = [
     ]
   },
 
-  // Applications
+  // Applications (nested)
   {
     path: 'application',
     children: [
@@ -77,7 +82,7 @@ const routes: Routes = [
     ]
   },
 
-  // Profile
+  // Profile (nested)
   {
     path: 'profile',
     children: [
@@ -94,4 +99,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

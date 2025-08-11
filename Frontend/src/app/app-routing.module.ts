@@ -25,11 +25,15 @@ import { LockScreenComponent } from './profile/lock-screen/lock-screen.component
 import { ProfileComponent } from './profile/profile/profile.component';
 import { AddDepartmentComponent } from './add-department/add-department.component';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
+  {
+    path:'register', component: RegisterComponent
+  },
 
   // Employees
   { path: 'employees', component: EmployeesComponent },

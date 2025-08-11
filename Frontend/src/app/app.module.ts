@@ -34,6 +34,7 @@ import { ProfileComponent } from './profile/profile/profile.component';
 import { AddDepartmentComponent } from './add-department/add-department.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AddEmployeeComponent } from './add-employee/add-employee.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { AddEmployeeComponent } from './add-employee/add-employee.component';
     LockScreenComponent,
     ProfileComponent,
     AddDepartmentComponent,
-    AddEmployeeComponent
+    AddEmployeeComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,18 @@
-const express = require('express'); 
+const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
-const session = require('express-session');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
+// Create uploads dir if not exists
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+// Create MySQL connection pool with promise support
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -13,21 +22,37 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0
 });
-
 const promisePool = pool.promise();
 
 const app = express();
 const PORT = 3000;
 
-// Middleware
-app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
+app.use(cors());
 app.use(express.json());
-app.use(session({
-  secret: 'your-secret-key', // replace with a strong secret
-  resave: false,
-  saveUninitialized: false,
-  cookie: { secure: false } // set to true if using HTTPS
-}));
+
+// Multer setup for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB limit
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only JPEG, JPG, and PNG files are allowed'));
+    }
+  }
+});
 
 // Test DB connection
 pool.getConnection((err, conn) => {
@@ -44,7 +69,7 @@ app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from backend' });
 });
 
-// Validate employee fields middleware
+// Validate required fields middleware for employee
 function validateEmployeeFields(req, res, next) {
   const body = req.body;
   const firstname = body.firstname || body.firstName;
@@ -52,7 +77,9 @@ function validateEmployeeFields(req, res, next) {
   const email = body.email;
 
   if (!firstname || !lastName || !email) {
-    return res.status(400).json({ error: 'Missing required fields: firstname, lastName, email' });
+    return res.status(400).json({
+      error: 'Missing required fields: firstname, lastName, email'
+    });
   }
 
   req.body.firstname = firstname;
@@ -60,9 +87,9 @@ function validateEmployeeFields(req, res, next) {
   next();
 }
 
-// Employee CRUD routes
+// --------- Employee CRUD -----------
 
-// CREATE employee
+// CREATE - Add employee
 app.post('/api/employees', validateEmployeeFields, (req, res) => {
   let {
     name, office, email, salary, role, status,
@@ -91,7 +118,7 @@ app.post('/api/employees', validateEmployeeFields, (req, res) => {
   });
 });
 
-// READ all employees
+// READ - All employees
 app.get('/api/employees', (req, res) => {
   pool.query('SELECT * FROM employees', (err, results) => {
     if (err) {
@@ -102,7 +129,7 @@ app.get('/api/employees', (req, res) => {
   });
 });
 
-// READ single employee by ID
+// READ - Single employee by ID
 app.get('/api/employees/:id', (req, res) => {
   pool.query('SELECT * FROM employees WHERE id = ?', [req.params.id], (err, result) => {
     if (err) {
@@ -116,7 +143,7 @@ app.get('/api/employees/:id', (req, res) => {
   });
 });
 
-// UPDATE employee by ID
+// UPDATE - Employee by ID
 app.put('/api/employees/:id', (req, res) => {
   const { id } = req.params;
   const updated = req.body;
@@ -152,7 +179,7 @@ app.put('/api/employees/:id', (req, res) => {
   });
 });
 
-// DELETE employee by ID
+// DELETE - Employee by ID
 app.delete('/api/employees/:id', (req, res) => {
   pool.query('DELETE FROM employees WHERE id = ?', [req.params.id], (err, result) => {
     if (err) {
@@ -163,14 +190,23 @@ app.delete('/api/employees/:id', (req, res) => {
   });
 });
 
-// Leave management
+// --------- Leaves Backend ----------
+
+// Helper function to calculate duration in days
+function calculateDuration(startDate, endDate) {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diffTime = end - start;
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // include both start and end days
+  return diffDays > 0 ? diffDays : 0;
+}
 
 // Validation middleware for leave requests
 function validateLeave(req, res, next) {
-  const { employee_id, start_date, end_date } = req.body;
-  if (!employee_id || !start_date || !end_date) {
+  const { employee_id, start_date, end_date, leave_type } = req.body;
+  if (!employee_id || !start_date || !end_date || !leave_type) {
     return res.status(400).json({
-      error: 'Missing required fields: employee_id, start_date, end_date'
+      error: 'Missing required fields: employee_id, start_date, end_date, leave_type'
     });
   }
   next();
@@ -178,12 +214,14 @@ function validateLeave(req, res, next) {
 
 // CREATE leave
 app.post('/api/leaves', validateLeave, async (req, res) => {
-  const { employee_id, start_date, end_date, status, reason } = req.body;
+  const { employee_id, start_date, end_date, status, reason, leave_type } = req.body;
+  const duration = calculateDuration(start_date, end_date);
+
   try {
     const [result] = await promisePool.query(
-      `INSERT INTO leaves (employee_id, start_date, end_date, status, reason)
-       VALUES (?, ?, ?, ?, ?)`,
-      [employee_id, start_date, end_date, status || 'pending', reason || null]
+      `INSERT INTO leaves (employee_id, start_date, end_date, status, reason, leave_type, duration)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [employee_id, start_date, end_date, status || 'pending', reason || null, leave_type, duration]
     );
     res.status(201).json({ message: 'Leave created', id: result.insertId });
   } catch (err) {
@@ -203,7 +241,7 @@ app.get('/api/leaves', async (req, res) => {
   }
 });
 
-// READ leaves by employee_id
+// READ leave by employee_id
 app.get('/api/leaves/employee/:employee_id', async (req, res) => {
   try {
     const [rows] = await promisePool.query(
@@ -217,13 +255,29 @@ app.get('/api/leaves/employee/:employee_id', async (req, res) => {
   }
 });
 
-// UPDATE leave by ID
+// UPDATE leave
 app.put('/api/leaves/:id', async (req, res) => {
-  const { status, reason } = req.body;
+  const { start_date, end_date, status, reason, leave_type } = req.body;
+  const duration = (start_date && end_date) ? calculateDuration(start_date, end_date) : null;
+
   try {
+    let finalStartDate = start_date;
+    let finalEndDate = end_date;
+    let finalDuration = duration;
+
+    if (!start_date || !end_date) {
+      const [rows] = await promisePool.query('SELECT start_date, end_date FROM leaves WHERE id = ?', [req.params.id]);
+      if (rows.length === 0) {
+        return res.status(404).json({ error: 'Leave not found' });
+      }
+      if (!start_date) finalStartDate = rows[0].start_date;
+      if (!end_date) finalEndDate = rows[0].end_date;
+      finalDuration = calculateDuration(finalStartDate, finalEndDate);
+    }
+
     await promisePool.query(
-      'UPDATE leaves SET status = ?, reason = ? WHERE id = ?',
-      [status || 'pending', reason || null, req.params.id]
+      `UPDATE leaves SET start_date = ?, end_date = ?, status = ?, reason = ?, leave_type = ?, duration = ? WHERE id = ?`,
+      [finalStartDate, finalEndDate, status || 'pending', reason || null, leave_type, finalDuration, req.params.id]
     );
     res.json({ message: 'Leave updated' });
   } catch (err) {
@@ -232,7 +286,7 @@ app.put('/api/leaves/:id', async (req, res) => {
   }
 });
 
-// DELETE leave by ID
+// DELETE leave
 app.delete('/api/leaves/:id', async (req, res) => {
   try {
     await promisePool.query('DELETE FROM leaves WHERE id = ?', [req.params.id]);
@@ -243,15 +297,15 @@ app.delete('/api/leaves/:id', async (req, res) => {
   }
 });
 
-// Department management
+// --------- Department CRUD ---------
 
-// CREATE department
+// CREATE Department (merged with description optional)
 app.post('/api/department', (req, res) => {
   const { name, status, description } = req.body;
   const sql = 'INSERT INTO department (name, status, description) VALUES (?, ?, ?)';
-  pool.query(sql, [name, status || 'active', description], (err, result) => {
+  pool.query(sql, [name, status || 'active', description || null], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.json({ message: 'Department added successfully', id: result.insertId });
+    res.status(201).json({ message: 'Department added', id: result.insertId });
   });
 });
 
@@ -272,25 +326,27 @@ app.get('/api/department/:id', (req, res) => {
   });
 });
 
-// UPDATE department by ID
+// UPDATE department
 app.put('/api/department/:id', (req, res) => {
   const { name, status } = req.body;
   const sql = 'UPDATE department SET name = ?, status = ? WHERE id = ?';
-  pool.query(sql, [name, status, req.params.id], (err) => {
+  pool.query(sql, [name, status, req.params.id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Department updated' });
   });
 });
 
-// DELETE department by ID
+// DELETE department
 app.delete('/api/department/:id', (req, res) => {
-  pool.query('DELETE FROM department WHERE id = ?', [req.params.id], (err) => {
+  const sql = 'DELETE FROM department WHERE id = ?';
+  pool.query(sql, [req.params.id], (err, result) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json({ message: 'Department deleted' });
   });
 });
 
-// User registration
+// --------- User Registration & Login ---------
+
 app.post('/api/register', async (req, res) => {
   const { firstname, lastname, email, password } = req.body;
   if (!firstname || !lastname || !email || !password) {
@@ -307,52 +363,44 @@ app.post('/api/register', async (req, res) => {
     res.status(201).json({ message: 'User registered', id: result.insertId });
   } catch (err) {
     console.error('Error registering user:', err.message);
+    if (err.code === 'ER_DUP_ENTRY') {
+      res.status(409).json({ error: 'Email already registered' });
+    } else {
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Missing email or password' });
+
+  try {
+    const [rows] = await promisePool.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (rows.length === 0) return res.status(401).json({ error: 'Invalid credentials' });
+
+    const user = rows[0];
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) return res.status(401).json({ error: 'Invalid credentials' });
+
+    // No session/token here, just return user info for now
+    res.json({ id: user.id, username: user.username, email: user.email });
+  } catch (err) {
+    console.error('Error during login:', err.message);
     res.status(500).json({ error: err.message });
   }
 });
 
-// User login route
-app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Missing email or password' });
+// --------- File Upload ---------
+
+app.post('/api/upload', upload.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: 'No file uploaded or invalid file type' });
   }
-
-  try {
-    const [rows] = await promisePool.query('SELECT * FROM users WHERE email = ?', [email]);
-    if (rows.length === 0) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    const user = rows[0];
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return res.status(401).json({ error: 'Invalid email or password' });
-    }
-
-    // Optional: you can store more info here
-    res.json({
-      message: 'Login successful',
-      user: {
-        id: user.id,
-        email: user.email,
-        firstname: user.firstname || ''
-      }
-    });
-  } catch (err) {
-    console.error('Login error:', err.message);
-    res.status(500).json({ error: 'Server error' });
-  }
+  res.json({ filename: req.file.filename });
 });
 
-// User logout
-app.post('/api/logout', (req, res) => {
-  req.session.destroy(() => {
-    res.json({ message: 'Logged out' });
-  });
-});
-
-// Start server
+// --------- Start Server ---------
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });

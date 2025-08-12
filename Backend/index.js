@@ -6,7 +6,6 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-<<<<<<< HEAD
 // Create uploads dir if not exists
 const uploadDir = path.join(__dirname, 'uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -14,10 +13,6 @@ if (!fs.existsSync(uploadDir)) {
 }
 
 // Create MySQL connection pool with promise support
-=======
-
-// Create connection pool and wrap it with promise support
->>>>>>> avantika/main
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -28,10 +23,6 @@ const pool = mysql.createPool({
   queueLimit: 0
 });
 const promisePool = pool.promise();
-promisePool.query('DESCRIBE leaves').then(([rows]) => {
-  console.log('Leaves table columns:', rows);
-}).catch(console.error);
-
 
 const app = express();
 const PORT = 3000;
@@ -73,35 +64,6 @@ pool.getConnection((err, conn) => {
   conn.release();
 });
 
-
-const multer = require('multer');
-const path = require('path');
-
-const uploadDir = path.join(__dirname, 'uploads');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only JPEG, JPG, and PNG files are allowed'), false);
-    }
-  }
-});
-
-
 // Test route
 app.get('/api/hello', (req, res) => {
   res.json({ message: 'Hello from backend' });
@@ -125,11 +87,8 @@ function validateEmployeeFields(req, res, next) {
   next();
 }
 
-<<<<<<< HEAD
 // --------- Employee CRUD -----------
 
-=======
->>>>>>> avantika/main
 // CREATE - Add employee
 app.post('/api/employees', validateEmployeeFields, (req, res) => {
   let {
@@ -243,16 +202,6 @@ function calculateDuration(startDate, endDate) {
 }
 
 // Validation middleware for leave requests
-// Helper function to calculate duration in days
-function calculateDuration(startDate, endDate) {
-  const start = new Date(startDate);
-  const end = new Date(endDate);
-  const diffTime = end - start;
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1; // +1 to include both start and end days
-  return diffDays > 0 ? diffDays : 0;
-}
-
-// Validation middleware for leave requests
 function validateLeave(req, res, next) {
   const { employee_id, start_date, end_date, leave_type } = req.body;
   if (!employee_id || !start_date || !end_date || !leave_type) {
@@ -312,10 +261,6 @@ app.put('/api/leaves/:id', async (req, res) => {
   const duration = (start_date && end_date) ? calculateDuration(start_date, end_date) : null;
 
   try {
-<<<<<<< HEAD
-=======
-    // If duration is null (because start_date or end_date not updated), fetch current dates from DB
->>>>>>> avantika/main
     let finalStartDate = start_date;
     let finalEndDate = end_date;
     let finalDuration = duration;
@@ -340,6 +285,7 @@ app.put('/api/leaves/:id', async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 // DELETE leave
 app.delete('/api/leaves/:id', async (req, res) => {
   try {

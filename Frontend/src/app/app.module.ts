@@ -78,7 +78,13 @@ import { RegisterComponent } from './register/register.component';
     FormsModule,
     ReactiveFormsModule,
     FullCalendarModule,
+<<<<<<< HEAD
     HttpClientModule
+=======
+    HttpClientModule,
+    ReactiveFormsModule,
+
+>>>>>>> avantika/main
   ],
   providers: [],
   bootstrap: [AppComponent]

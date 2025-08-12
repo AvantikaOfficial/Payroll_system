@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 
 export interface Employee {
+  profileImage: string;
   frequency: any;
   currency: any;
   countryOfEmployment: any;

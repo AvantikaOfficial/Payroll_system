@@ -8,14 +8,14 @@
                     <h5 class="fw-bold">Leaves</h5>
                 </div>
                 <div>
-                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal"
-                        data-bs-target="#add_modal"><i class="ti ti-circle-plus me-1"></i>New Leave</a>
+                    <a href="javascript:void(0);" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLeaveModal">
+<i class="ti ti-circle-plus me-1"></i>New Leave</a>
                 </div>
             </div>
             <!-- End Page Header -->
             <div class="d-flex align-items-center mb-3">
                 <a href="leaves.html" class="btn btn-sm btn-dark fs-14 me-2">All Leaves</a>
-                <a href="leave-types.html" class="btn btn-sm btn-light fs-14 border">Leave Types</a>
+                <a href="leave-type" class="btn btn-sm btn-light fs-14 border">Leave Types</a>
             </div>
             <div class="d-flex align-items-center justify-content-between flex-wrap row-gap-3 mb-3">
                 <div class="datatable-search">
@@ -167,8 +167,8 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="add_modal">
-        <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="addLeaveModal">
+            <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="page-title">
@@ -185,11 +185,12 @@
                                 <div class="mb-3">
                                     <label class="form-label">Employee Name <span class="text-danger">*</span></label>
                                     <select formControlName="employee_id" class="form-select" required>
-                                        <option value="" disabled>Select Employee</option>
+                                        <option value="" disabled selected>Select Employee</option>
                                         <option *ngFor="let emp of employees" [value]="emp.id">
                                             {{ emp.firstname }} {{ emp.lastName }}
                                         </option>
                                     </select>
+
                                 </div>
                             </div>
 
@@ -202,6 +203,7 @@
                                         <option value="Casual Leave">Casual Leave</option>
                                         <option value="Sick Leave">Sick Leave</option>
                                     </select>
+
                                 </div>
                             </div>
 
@@ -230,7 +232,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Duration <span class="text-danger">*</span></label>
                                     <select formControlName="duration" class="form-select" required>
-                                        <option value="" disabled>Select Duration</option>
+                                        <option value="" disabled selected>Select Duration</option>
                                         <option value="Full Day">Full Day</option>
                                         <option value="First Half">First Half</option>
                                         <option value="Second Half">Second Half</option>
@@ -269,8 +271,8 @@
             </div>
         </div>
     </div> <!-- end modal -->
-    <div class="modal fade" id="addLeaveModal" tabindex="-1" aria-labelledby="addLeaveModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+<div class="modal fade" id="addLeaveModal">
+            <div class="modal-dialog">
             <form [formGroup]="leaveForm" (ngSubmit)="onSubmit()" class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addLeaveModalLabel">
@@ -301,12 +303,13 @@
 
                     <div class="mb-3">
                         <label for="leaveType" class="form-label">Leave Type</label>
-                        <select id="leaveType" formControlName="leave_type" class="form-select" required>
-                            <option value="" disabled>Select leave type</option>
+                        <select formControlName="leave_type" required>
+                            <option value="" disabled>Select Leave Type</option>
                             <option value="Annual Leave">Annual Leave</option>
                             <option value="Casual Leave">Casual Leave</option>
                             <option value="Sick Leave">Sick Leave</option>
                         </select>
+
                     </div>
 
                     <div class="mb-3">

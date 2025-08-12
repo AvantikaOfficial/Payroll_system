@@ -165,8 +165,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let emp of employees">
-                            <td>{{ emp.name }}</td>
+                            <tr *ngFor="let emp of employees; trackBy: trackById">
+                            <td>{{ emp.firstname }} {{ emp.lastName }}</td>
                             <td>{{ emp.office }}</td>
                             <td>{{ emp.position }}</td>
                             <td>{{ emp.team }}</td>

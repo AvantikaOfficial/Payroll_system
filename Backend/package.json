@@ -18,12 +18,20 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+<<<<<<< HEAD
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
     "flatpickr": "^4.6.13",
     "jsonwebtoken": "^9.0.2",
+=======
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "file-type": "^21.0.0",
+    "flatpickr": "^4.6.13",
+    "multer": "^2.0.2",
+>>>>>>> avantika/main
     "mysql2": "^3.14.3",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

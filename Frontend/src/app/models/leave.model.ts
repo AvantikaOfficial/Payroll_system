@@ -1,4 +1,5 @@
 export interface Leave {
+  NoofDays: string;
   id: number;
   employee_id: number;
   start_date: string;

@@ -94,39 +94,35 @@ export class AddEmployeeComponent implements OnInit, AfterViewInit {
     if (this.employeeForm.valid) {
       const formData = this.employeeForm.value;
 
-      if (this.employeeId) {
-        this.employeesService.updateEmployee(this.employeeId, formData).subscribe({
-          next: () => {
-            this.formStatus = FormStatus.Success;
-            alert('Employee updated successfully!');
+if (this.employeeId) {
+this.employeesService.updateEmployee(this.employeeId, formData).subscribe({
+  next: () => {
+    alert('Employee updated successfully!');
+    this.router.navigate(['/employees']);
+  },
+  error: (err) => {
+    alert('Failed to update employee');
+    console.error(err);
+  }
+});
+} else {
+  this.employeesService.addEmployee(formData).subscribe({
+    next: () => {
+      this.formStatus = FormStatus.Success;
+      alert('Employee added successfully!');
 
-            // ✅ Force reload to trigger ngOnInit in employees.component.ts
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/employees']);
-            });
-          },
-          error: (err) => {
-            this.formStatus = FormStatus.Error;
-            console.error('Update failed', err);
-            alert(`Could not update employee. Please check backend connection.`);
-          }
-        });
-      } else {
-        this.employeesService.addEmployee(formData).subscribe({
-          next: () => {
-            this.formStatus = FormStatus.Success;
-            alert('Employee added successfully!');
-            this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-              this.router.navigate(['/employees']);
-            });
-          },
-          error: (err) => {
-            this.formStatus = FormStatus.Error;
-            console.error('Add failed', err);
-            alert(`Could not connect to the backend.`);
-          }
-        });
-      }
+      // ✅ Same here for add
+      this.router.navigate(['/employees'], {
+        queryParams: { reload: new Date().getTime() }
+      });
+    },
+    error: (err) => {
+      this.formStatus = FormStatus.Error;
+      console.error('Add failed', err);
+      alert(`Could not connect to the backend.`);
+    }
+  });
+}
     } else {
       this.formStatus = FormStatus.Error;
       this.employeeForm.markAllAsTouched();

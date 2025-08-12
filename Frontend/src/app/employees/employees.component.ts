@@ -41,23 +41,18 @@ export class EmployeesComponent implements OnInit, OnDestroy {
     this.routerSub?.unsubscribe();
   }
 
-  loadEmployees(): void {
-    this.loading = true;
-    this.error = null;
-
-    this.employeesService.getEmployees().subscribe({
-      next: (data: Employee[]) => {
-        this.employees = data;
-        this.loading = false;
-        console.log('Employees loaded:', data);
-      },
-      error: (err) => {
-        this.error = err.message || 'Error loading employees';
-        this.loading = false;
-        console.error('Failed to load employees:', err);
-      }
-    });
-  }
+loadEmployees(): void {
+  console.log('Fetching employee list...');
+  this.employeesService.getEmployees().subscribe({
+    next: (data: Employee[]) => {
+      this.employees = data;
+      console.log('Updated employee list:', data);
+    },
+    error: (err) => {
+      console.error('Error loading employees:', err);
+    }
+  });
+}
 
   confirmDelete(id: number): void {
     this.selectedEmployeeIdForDelete = id;
@@ -82,4 +77,9 @@ export class EmployeesComponent implements OnInit, OnDestroy {
   editEmployee(id: number): void {
     this.router.navigate(['/add-employee', id]);
   }
+
+trackById(index: number, employee: Employee): number {
+  return employee.id ?? index;
+}
+
 }
